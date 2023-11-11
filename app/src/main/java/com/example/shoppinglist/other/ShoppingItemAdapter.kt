@@ -36,7 +36,13 @@ class ShoppingItemAdapter(
         // Set the text color using the resource ID
         holder.binding.tvName.setTextColor(ContextCompat.getColor(holder.itemView.context, textColorResourceId))
         holder.binding.tvName.text = currentShoppingItem.name
+        holder.binding.tvAmount.setTextColor(ContextCompat.getColor(holder.itemView.context, textColorResourceId))
         holder.binding.tvAmount.text = "${currentShoppingItem.amount}"
+        holder.binding.tvPrice.setTextColor(ContextCompat.getColor(holder.itemView.context, textColorResourceId))
+        holder.binding.tvPrice.text = "${currentShoppingItem.price}"
+        holder.binding.swBought.setTextColor(ContextCompat.getColor(holder.itemView.context, textColorResourceId))
+        holder.binding.swBought.isChecked = currentShoppingItem.wasBought
+        holder.binding.tvUSD.setTextColor(ContextCompat.getColor(holder.itemView.context, textColorResourceId))
 
         holder.binding.ivDelete.setOnClickListener(){
             viewModel.delete(currentShoppingItem)
@@ -51,6 +57,11 @@ class ShoppingItemAdapter(
 
         holder.binding.ivPlus.setOnClickListener(){
             currentShoppingItem.amount++
+            viewModel.upsert(currentShoppingItem)
+        }
+
+        holder.binding.swBought.setOnClickListener(){
+            currentShoppingItem.wasBought = holder.binding.swBought.isChecked
             viewModel.upsert(currentShoppingItem)
         }
     }
