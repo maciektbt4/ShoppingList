@@ -7,18 +7,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.shoppinglist.R
 import com.example.shoppinglist.data.db.entities.ShoppingItem
 import com.example.shoppinglist.ui.shoppinglist.ShoppingViewModel
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-//import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProviders
-import com.example.shoppinglist.data.db.ShoppingDatabase
-import com.example.shoppinglist.data.repositories.ShoppingRepository
-import com.example.shoppinglist.databinding.ActivityShoppingBinding
+import androidx.core.content.ContextCompat
 import com.example.shoppinglist.databinding.ShoppingItemBinding
 
 class ShoppingItemAdapter(
     var items: List<ShoppingItem>,
-    private val viewModel: ShoppingViewModel
+    private val viewModel: ShoppingViewModel,
+    private val textColor: String = "black"
 ): RecyclerView.Adapter<ShoppingItemAdapter.ShoppingViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShoppingViewHolder {
@@ -28,6 +23,18 @@ class ShoppingItemAdapter(
 
     override fun onBindViewHolder(holder: ShoppingViewHolder, position: Int) {
         val currentShoppingItem =  items[position]
+
+        // Get the color resource ID based on your textColor value
+        val textColorResourceId = when (textColor) {
+            "white" -> R.color.white
+            "black" -> R.color.black
+            "green" -> R.color.green
+            "red" -> R.color.red
+            "blue" -> R.color.blue
+            else -> R.color.black // Default to black if an invalid color is provided
+        }
+        // Set the text color using the resource ID
+        holder.binding.tvName.setTextColor(ContextCompat.getColor(holder.itemView.context, textColorResourceId))
         holder.binding.tvName.text = currentShoppingItem.name
         holder.binding.tvAmount.text = "${currentShoppingItem.amount}"
 
