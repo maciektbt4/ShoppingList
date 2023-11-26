@@ -43,7 +43,7 @@ class EditShoppingItem: AppCompatActivity() {
                 val priceString = binding.etPrice.text.toString()
                 val price = priceString.toFloatOrNull() ?: 0.0f // Convert String to Float or use a default value
                 item.price = price
-                val amountString = binding.etPrice.text.toString()
+                val amountString = binding.etAmount.text.toString()
                 val amount = amountString.toIntOrNull() ?: 0 // Convert String to Float or use a default value
                 item.amount = amount
                 viewModel = ViewModelProviders.of(this, factory).get(ShoppingViewModel::class.java)

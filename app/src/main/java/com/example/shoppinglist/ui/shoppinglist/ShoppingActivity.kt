@@ -48,26 +48,14 @@ class ShoppingActivity : AppCompatActivity() {
                     @SuppressLint("RestrictedApi")
                     override fun onAddButtonClicked(item: ShoppingItem) {
                         viewModel.upsert(item)
+                        val intent = Intent("ITEM_ADDED_TO_SHOPPING_LIST").apply{
+                            val gson = Gson()
+                            val serializedItem = gson.toJson(item)
+                            putExtra("ITEM", serializedItem)
+                        }
+                        sendBroadcast(intent)
                         // broadcast with permissions
-//                        val intent = Intent("ITEM_ADDED_TO_SHOPPING_LIST")
-//                        intent.setPackage("com.example.broadcastreceiverapp") // Specify the package name of application2
-//                        intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES) // Include stopped packages
-//                        sendBroadcast(intent.apply {
-//                            putExtra("ITEM_NAME", item.name)
-//                            putExtra("ITEM_AMOUNT", item.amount.toString())
-//                            putExtra("ITEM_PRICE", item.price.toString())
-//                        }, "CUSTOM_PERMISSION")
-
-                        sendBroadcast(
-                            Intent("ITEM_ADDED_TO_SHOPPING_LIST").apply{
-                                val gson = Gson()
-                                val serializedItem = gson.toJson(item)
-                                putExtra("ITEM", serializedItem)
-//                                putExtra("ITEM_NAME", item.name)
-//                                putExtra("ITEM_AMOUNT", item.amount.toString())
-//                                putExtra("ITEM_PRICE", item.price.toString())
-                            })
-
+//                        sendBroadcast(intent,"com.example.shoppinglist.CUSTOM_PERMISSION")
                     }
                 }).show()
         }
