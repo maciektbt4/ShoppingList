@@ -1,5 +1,6 @@
 package com.example.shoppinglist.ui.shoppinglist
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -14,6 +15,7 @@ import com.example.shoppinglist.data.repositories.ShoppingRepository
 import com.example.shoppinglist.databinding.ActivityShoppingBinding
 import com.example.shoppinglist.other.ShoppingItemAdapter
 import com.example.shoppinglist.settings.AppSettings
+import com.google.gson.Gson
 
 class ShoppingActivity : AppCompatActivity() {
     private lateinit var viewModel: ShoppingViewModel
@@ -43,8 +45,29 @@ class ShoppingActivity : AppCompatActivity() {
         binding.fab.setOnClickListener{
             AddShoppingItemDialog(this,
                 object: AddDialogListener{
+                    @SuppressLint("RestrictedApi")
                     override fun onAddButtonClicked(item: ShoppingItem) {
                         viewModel.upsert(item)
+                        // broadcast with permissions
+//                        val intent = Intent("ITEM_ADDED_TO_SHOPPING_LIST")
+//                        intent.setPackage("com.example.broadcastreceiverapp") // Specify the package name of application2
+//                        intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES) // Include stopped packages
+//                        sendBroadcast(intent.apply {
+//                            putExtra("ITEM_NAME", item.name)
+//                            putExtra("ITEM_AMOUNT", item.amount.toString())
+//                            putExtra("ITEM_PRICE", item.price.toString())
+//                        }, "CUSTOM_PERMISSION")
+
+                        sendBroadcast(
+                            Intent("ITEM_ADDED_TO_SHOPPING_LIST").apply{
+                                val gson = Gson()
+                                val serializedItem = gson.toJson(item)
+                                putExtra("ITEM", serializedItem)
+//                                putExtra("ITEM_NAME", item.name)
+//                                putExtra("ITEM_AMOUNT", item.amount.toString())
+//                                putExtra("ITEM_PRICE", item.price.toString())
+                            })
+
                     }
                 }).show()
         }

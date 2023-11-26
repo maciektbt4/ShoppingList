@@ -13,4 +13,7 @@ interface ShoppingDao {
 
     @Query("SELECT * FROM shopping_items")
     fun getAllShoppingItems(): LiveData<List<ShoppingItem>>
+
+    @Query("UPDATE shopping_items SET item_name = :newName, item_amount = :newAmount, item_price = :newPrice WHERE item_name = :oldName")
+    suspend fun updateItemByName(oldName:String, newName: String, newAmount: Int, newPrice: Float)
 }

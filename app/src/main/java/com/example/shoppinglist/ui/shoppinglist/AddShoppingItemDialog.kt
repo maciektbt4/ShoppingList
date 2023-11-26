@@ -1,14 +1,13 @@
 package com.example.shoppinglist.ui.shoppinglist
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDialog
-import com.example.shoppinglist.R
 import com.example.shoppinglist.data.db.entities.ShoppingItem
 import com.example.shoppinglist.databinding.DialogAddShoppingItemBinding
-import com.example.shoppinglist.databinding.ShoppingItemBinding
 
 class AddShoppingItemDialog(context: Context, var addDialogListener: AddDialogListener):AppCompatDialog(context) {
     private lateinit var binding: DialogAddShoppingItemBinding
@@ -29,6 +28,7 @@ class AddShoppingItemDialog(context: Context, var addDialogListener: AddDialogLi
 
             val item = ShoppingItem(name, amount.toInt(), price.toFloat(), false)
             addDialogListener.onAddButtonClicked(item)
+
             dismiss()
         }
 

@@ -75,4 +75,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-extensions:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
     kapt("androidx.lifecycle:lifecycle-compiler:$lifecycleVersion")
+
+    //JSON
+    implementation("com.google.code.gson:gson:2.10.1")
 }

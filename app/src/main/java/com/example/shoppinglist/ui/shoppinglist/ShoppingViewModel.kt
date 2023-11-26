@@ -19,4 +19,9 @@ class ShoppingViewModel(
     }
 
     fun getAllShoppingItems() = repository.getAllShoppingItem()
+
+    fun updateItem(oldName:String, item:ShoppingItem)= CoroutineScope(Dispatchers.Main).launch{
+        repository.updateItem(oldName, item)
+    }
+
 }

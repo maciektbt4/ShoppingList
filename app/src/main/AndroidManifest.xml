@@ -22,6 +22,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".settings.AppSettings"/>
+        <activity android:name=".ui.shoppinglist.EditShoppingItem"
+            android:exported="true"/>
     </application>
 
 </manifest>
