@@ -1,22 +1,22 @@
 package com.example.shoppinglist.other
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shoppinglist.R
-import com.example.shoppinglist.data.db.entities.ShoppingItem
 import com.example.shoppinglist.ui.shoppinglist.ShoppingViewModel
 import androidx.core.content.ContextCompat
+import com.example.shoppinglist.data.db.entities.ShoppingItemFirebase
 import com.example.shoppinglist.databinding.ShoppingItemBinding
 
 class ShoppingItemAdapter(
-    var items: List<ShoppingItem>,
+    var items: List<ShoppingItemFirebase>,
     private val viewModel: ShoppingViewModel,
     private val textColor: String = "black"
 ): RecyclerView.Adapter<ShoppingItemAdapter.ShoppingViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShoppingViewHolder {
+
         val binding = ShoppingItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ShoppingViewHolder(binding)
     }
@@ -41,7 +41,7 @@ class ShoppingItemAdapter(
         holder.binding.tvPrice.setTextColor(ContextCompat.getColor(holder.itemView.context, textColorResourceId))
         holder.binding.tvPrice.text = "${currentShoppingItem.price}"
         holder.binding.swBought.setTextColor(ContextCompat.getColor(holder.itemView.context, textColorResourceId))
-        holder.binding.swBought.isChecked = currentShoppingItem.wasBought
+        holder.binding.swBought.isChecked = currentShoppingItem.bought
         holder.binding.tvUSD.setTextColor(ContextCompat.getColor(holder.itemView.context, textColorResourceId))
 
         holder.binding.ivDelete.setOnClickListener(){
@@ -51,18 +51,18 @@ class ShoppingItemAdapter(
         holder.binding.ivMinus.setOnClickListener(){
             if(currentShoppingItem.amount > 0){
                 currentShoppingItem.amount--
-                viewModel.upsert(currentShoppingItem)
+                viewModel.update(currentShoppingItem)
             }
         }
 
         holder.binding.ivPlus.setOnClickListener(){
             currentShoppingItem.amount++
-            viewModel.upsert(currentShoppingItem)
+            viewModel.update(currentShoppingItem)
         }
 
         holder.binding.swBought.setOnClickListener(){
-            currentShoppingItem.wasBought = holder.binding.swBought.isChecked
-            viewModel.upsert(currentShoppingItem)
+            currentShoppingItem.bought = holder.binding.swBought.isChecked
+            viewModel.update(currentShoppingItem)
         }
     }
 

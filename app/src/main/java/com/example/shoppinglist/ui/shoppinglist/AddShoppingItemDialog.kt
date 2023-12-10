@@ -1,12 +1,11 @@
 package com.example.shoppinglist.ui.shoppinglist
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDialog
-import com.example.shoppinglist.data.db.entities.ShoppingItem
+import com.example.shoppinglist.data.db.entities.ShoppingItemFirebase
 import com.example.shoppinglist.databinding.DialogAddShoppingItemBinding
 
 class AddShoppingItemDialog(context: Context, var addDialogListener: AddDialogListener):AppCompatDialog(context) {
@@ -26,7 +25,7 @@ class AddShoppingItemDialog(context: Context, var addDialogListener: AddDialogLi
                 return@setOnClickListener
             }
 
-            val item = ShoppingItem(name, amount.toInt(), price.toFloat(), false)
+            val item = ShoppingItemFirebase(name, amount.toInt(), price.toFloat(), false)
             addDialogListener.onAddButtonClicked(item)
 
             dismiss()

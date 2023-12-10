@@ -1,16 +1,12 @@
 package com.example.shoppinglist.ui.shoppinglist
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProviders
-import com.example.shoppinglist.data.db.ShoppingDatabase
-import com.example.shoppinglist.data.db.entities.ShoppingItem
-import com.example.shoppinglist.data.repositories.ShoppingRepository
+import com.example.shoppinglist.data.db.entities.ShoppingItemFirebase
+import com.example.shoppinglist.data.repositories.ShoppingRepositoryFirebase
 import com.example.shoppinglist.databinding.ActivityEditShoppingItemBinding
-import com.example.shoppinglist.databinding.ActivityShoppingBinding
 import com.google.gson.Gson
 
 class EditShoppingItem: AppCompatActivity() {
@@ -25,7 +21,7 @@ class EditShoppingItem: AppCompatActivity() {
         val serializedItem = intent.getStringExtra("ITEM")
         var itemExist:Boolean = false
         if (serializedItem != null) {
-            val item = Gson().fromJson(serializedItem, ShoppingItem::class.java)
+            val item = Gson().fromJson(serializedItem, ShoppingItemFirebase::class.java)
             binding.etName.setText(item.name)
             binding.etAmount.setText(item.amount.toString())
             binding.etPrice.setText(item.price.toString())
@@ -34,10 +30,9 @@ class EditShoppingItem: AppCompatActivity() {
 
         binding.tvEdit.setOnClickListener() {
             if (itemExist){
-                val database = ShoppingDatabase(this)
-                val repository = ShoppingRepository(database)
+                val repository = ShoppingRepositoryFirebase()
                 val factory = ShoppingViewModelFactory(repository)
-                var item = Gson().fromJson(serializedItem, ShoppingItem::class.java)
+                var item = Gson().fromJson(serializedItem, ShoppingItemFirebase::class.java)
                 val oldItemName = item.name
                 item.name = binding.etName.text.toString()
                 val priceString = binding.etPrice.text.toString()
@@ -49,7 +44,7 @@ class EditShoppingItem: AppCompatActivity() {
                 viewModel = ViewModelProviders.of(this, factory).get(ShoppingViewModel::class.java)
                 Log.d("ITEM","$item")
 
-                viewModel.updateItem(oldItemName, item)
+                viewModel.update(item, oldItemName)
                 Log.d("ITEM","$item")
             }
 

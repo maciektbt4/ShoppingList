@@ -33,4 +33,14 @@
         app:layout_constraintBottom_toBottomOf="@+id/rvShoppingItems"
         app:layout_constraintEnd_toStartOf="@+id/fab" />
 
+    <Button
+        android:id="@+id/btnSignOut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="4dp"
+        android:text="sign out"
+        app:layout_constraintBottom_toBottomOf="@+id/rvShoppingItems"
+        app:layout_constraintEnd_toStartOf="@+id/settings" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
