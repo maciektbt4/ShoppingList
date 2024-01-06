@@ -37,7 +37,7 @@ class RegisterActivity : AppCompatActivity() {
         if(email.isNotEmpty() && password.isNotEmpty()){
             CoroutineScope(Dispatchers.IO).launch{
                 try {
-                    Log.d("RegisterUser","Coroutine is running")
+                    Log.d("RegisterUser","Coroutine is running 2")
                     auth.createUserWithEmailAndPassword(email,password).await()
                     Log.d("RegisterUser","Coroutine is finished")
                     withContext(Dispatchers.Main){

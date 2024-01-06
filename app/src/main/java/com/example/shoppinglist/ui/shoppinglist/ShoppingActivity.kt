@@ -3,16 +3,20 @@ package com.example.shoppinglist.ui.shoppinglist
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.shoppinglist.data.db.entities.ShoppingItemFirebase
 import com.example.shoppinglist.data.repositories.ShoppingRepositoryFirebase
 import com.example.shoppinglist.databinding.ActivityShoppingBinding
-import com.example.shoppinglist.logging.LoginActivity
+import com.example.shoppinglist.geo.MapsActivity
+import com.example.shoppinglist.geo.ShopViewModel
+import com.example.shoppinglist.geo.tracking.LocationService
 import com.example.shoppinglist.other.ShoppingItemAdapter
 import com.example.shoppinglist.settings.AppSettings
 import com.google.firebase.auth.FirebaseAuth
@@ -26,6 +30,8 @@ import kotlinx.coroutines.withContext
 
 class ShoppingActivity : AppCompatActivity() {
     private lateinit var viewModel: ShoppingViewModel
+    private lateinit var shopViewModel: ShopViewModel
+
     private lateinit var binding: ActivityShoppingBinding
     private lateinit var adapter: ShoppingItemAdapter
     lateinit var auth: FirebaseAuth
@@ -36,6 +42,15 @@ class ShoppingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d("ActivityShopping", "On create")
         super.onCreate(savedInstanceState)
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(android.Manifest.permission.POST_NOTIFICATIONS),
+                0
+            )
+        }
+
         binding = ActivityShoppingBinding.inflate(layoutInflater)
         auth = FirebaseAuth.getInstance()
 
@@ -44,6 +59,7 @@ class ShoppingActivity : AppCompatActivity() {
         val repository = ShoppingRepositoryFirebase()
         val factory = ShoppingViewModelFactory(repository)
         viewModel = ViewModelProviders.of(this, factory).get(ShoppingViewModel::class.java)
+
         adapter = ShoppingItemAdapter(listOf(), viewModel)
 
         binding.rvShoppingItems.layoutManager = LinearLayoutManager(this)
@@ -76,9 +92,13 @@ class ShoppingActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        binding.btnSignOut.setOnClickListener {
-            auth.signOut()
-            finish()
+        binding.map.setOnClickListener{
+            val intent = Intent(this, MapsActivity::class.java)
+            startActivity(intent)
+        }
+        Intent(applicationContext, LocationService::class.java).apply {
+            action = LocationService.ACTION_START
+            startService(this)
         }
     }
 
@@ -92,6 +112,14 @@ class ShoppingActivity : AppCompatActivity() {
         applySettings()
     }
 
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Intent(applicationContext, LocationService::class.java).apply {
+            action = LocationService.ACTION_STOP
+            startService(this)
+        }
+    }
     private fun subscribeToItemListUpdates() {
         itemRef.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
             firebaseFirestoreException?.let {
@@ -139,4 +167,6 @@ class ShoppingActivity : AppCompatActivity() {
             }
         }
     }
+
+
 }

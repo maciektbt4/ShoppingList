@@ -5,6 +5,7 @@ plugins {
 //    kotlin("android.extensions")
     id("kotlin-kapt")
     id("com.google.gms.google-services")
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {
@@ -54,6 +55,7 @@ dependencies {
 //    implementation("com.google.firebase:firebase-firestore-ktx:24.10.0")
     implementation("com.google.firebase:firebase-firestore:24.10.0")
     implementation("com.google.firebase:firebase-auth:22.3.0")
+    implementation("com.google.android.gms:play-services-maps:18.1.0")
 
 
     // Testing
@@ -83,4 +85,10 @@ dependencies {
 
     //JSON
     implementation("com.google.code.gson:gson:2.10.1")
+
+    //Google maps
+//    implementation("com.google.android.gms:play-services-location:17.1.0")
+    implementation("com.google.android.gms:play-services-location:21.0.1")
+
+
 }
